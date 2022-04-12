@@ -1,16 +1,9 @@
-resource "template_file" "blue_template" {
-  template = file("${path.module}/user-data.sh.tpl",
-    version == "Blue Version",
-    color == "lightblue"
-  )
-}
-
 resource "aws_launch_template" "blue_template" {
   name_prefix            = "blue_template"
-  image_id               = "data.aws_ami.aws_basic_linux.id"
+  image_id               = data.aws_ami.aws_basic_linux.id
   instance_type          = var.ec2_type
   vpc_security_group_ids = [aws_security_group.app_sg.id]
-  user_data              = "${templatefile("userdata.sh.tpl")}"
+  user_data              = base64encode(templatefile("${path.module}/user-data.sh.tftpl", {version = "Blue Version", color = "lightblue"}))
 }
 
 resource "aws_autoscaling_group" "blue" {

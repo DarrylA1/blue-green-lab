@@ -42,3 +42,6 @@ variable "my_keypair" {
 variable "number_of_private_instances" {
   description = "Amount of instances to deploy"
 }
+
+
+
